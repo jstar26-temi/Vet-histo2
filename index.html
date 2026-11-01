@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><title>Vet Histology by System</title>
+<html lang="en"><head><meta charset="utf-8"><title>VetHisto: Veterinary Histology Lab</title>
+<meta name="description" content="Veterinary histology for preclinical students: slides, whole organs, quizzes and revision sheets, one body system at a time.">
+<meta name="theme-color" content="#6d4aff">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%AC%3C/text%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>
 :root{--bg:#f5f1ff;--card:rgba(255,255,255,.75);--bd:#ded6f5;--tx:#1b1530;--mu:#6a6388;--a1:#e0268a;--a2:#6d4aff;--a3:#0fb5a8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -182,7 +185,7 @@ function live(o){const L=o[6].map((l,i)=>[l,i]).filter(x=>x[0][3]!='lu'),tot=L.r
 const xs=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let U=null;try{U=JSON.parse(localStorage.getItem('hvs-user'))}catch(_){}
 /* Class list: paste your Google Apps Script web app URL (ends in /exec) between the quotes. Leave empty to turn it off. */
-const SHEET_URL='';
+const SHEET_URL='https://script.google.com/macros/s/AKfycbwg5DMznX-s_k9gDmIVINoDZ1IbHCQx53SSNnfDzlXV_BSnbErKEg9CzBBbff59vbmk/exec';
 function toSheet(){if(!SHEET_URL||!U)return;try{fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name:U.name,school:U.school,phone:U.num})}).then(()=>{try{localStorage.removeItem('hvs-pend')}catch(_){}}).catch(()=>{try{localStorage.setItem('hvs-pend','1')}catch(_){}})}catch(_){}}
 const tb=(d,w,c1,c2,x='')=>{const a={d,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'};return e('path',{...a,stroke:c1,'stroke-width':w})+e('path',{...a,stroke:c2,'stroke-width':w*.78})+e('path',{...a,stroke:'#fff','stroke-opacity':.28,'stroke-width':w*.22,transform:`translate(0 ${-w*.2})`})+x},
 bl=(d,c1,c2,x='')=>e('path',{d,fill:c2,stroke:c1,'stroke-width':3})+e('path',{d,fill:'url(#hl)'})+e('path',{d,fill:'url(#sd)'})+x,
@@ -229,7 +232,7 @@ function home(){
  if(!U){$('v').innerHTML=`<div class="feat"><div>🔬<b>21 organs</b><small>5 body systems</small></div><div>🎯<b>Quizzes</b><small>Spotter and review</small></div><div>🐄🐔<b>Species modes</b><small>Ruminant, avian</small></div></div><div class="card"><h2>Sign in to the lab</h2><p class="mu">Sign in to use the simulator.</p><label class="f">Full name<input id="un" type="text" autocomplete="name" placeholder="e.g. Ada Okafor"></label><label class="f">University<input id="uq" type="text" autocomplete="off" placeholder="Search, then tap your university"></label><div id="ul"></div><div id="usel" class="mu" style="font-weight:700"></div><label class="f">Phone number<div class="ph"><span>+234</span><input id="uh" type="tel" inputmode="numeric" placeholder="8030000000"></div></label><div id="er" class="mu" style="color:var(--a1);min-height:20px"></div><button class="go" data-a="in">Enter the lab</button><p class="mu" style="margin:10px 0 0">Enter 10 digits without the first 0, e.g. 8030000000. Your details are saved on this device and shared with your class list.</p></div>`;return uni('')}
  const g=D.map((d,i)=>`<button class="tile" data-go="${i}"><span>${IC[i]}</span><b>${d[0]}</b><small>${d[1].filter(o=>!TAG[o[0]]).length} organs</small></button>`).join('')+`<button class="tile" data-t="c"><span>⚖️</span><b>Compare</b><small>Any two organs</small></button><button class="tile" data-t="q"><span>🎯</span><b>Quiz</b><small>Test yourself</small></button><button class="tile" data-t="r"><span>📋</span><b>Revision sheet</b><small>Epithelium table</small></button>`;
  $('v').innerHTML=`<div class="card"><div class="k" style="margin-top:0">Welcome</div><h2>${first()} 👋</h2><div class="mu">${xs(U.school)}<br>${xs(U.num)}</div><button class="go2" data-a="out">Sign out</button></div>${prog()}<input id="sq" class="sq" type="text" placeholder="🔎 Search a feature or organ, e.g. goblet cells" autocomplete="off"><div id="sr"></div><div class="k">Pick a system</div><div class="grid">${g}</div>`}
-function act(a){if(a=='lab'){location.hash='';return draw()}if(a=='csv')return csvDl();if(a=='out'){U=null;UN='';try{localStorage.removeItem('hvs-user')}catch(_){}tab='h';return draw()}
+function act(a){if(a=='out'){U=null;UN='';try{localStorage.removeItem('hvs-user')}catch(_){}tab='h';return draw()}
  const n=$('un').value.trim(),h=$('uh').value.replace(/\D/g,''),er=m=>$('er').textContent=m;
  if(n.length<2)return er('Enter your full name.');
  if(!UV.includes(UN))return er('Search and tap your university from the list.');
@@ -248,9 +251,8 @@ function quiz(){const v=$('v');
  if(!qz){const mm=Object.values(PG().m||{}).filter(x=>x>0).length;v.innerHTML=`<button class="c" data-t="h" style="margin-bottom:8px">← Home</button><div class="card" style="margin-top:0"><h2>🎯 Quiz</h2><p class="mu">10 questions: name the organ from an unlabelled slide, its epithelium, and its layers. Pick a scope.</p><div class="row" style="flex-wrap:wrap">`+[['All systems',-1],...D.map((d,i)=>[IC[i]+' '+d[0],i])].map(([n,i])=>`<button class="c" data-qs="${i}">${n}</button>`).join('')+`</div><button class="go2" data-qs="-1" data-sp="1">⏱ Timed spotter: slides only, 15 seconds each</button><button class="go2" data-qs="-2"${mm?'':' disabled'}>🔁 Review my mistakes${mm?' ('+mm+' organs)':' (none yet)'}</button></div>`;return}
  if(qz.i>=qz.q.length){recQ();v.innerHTML=`<div class="card"><h2>Score: ${qz.sc}/${qz.q.length}</h2><p class="mu">${qz.sc>=qz.q.length*.8?'Excellent work.':qz.sc>=qz.q.length*.5?'Good. Review the ones you missed.':'Keep practising in the system pages, then try again.'}</p><button class="go" data-qs="${qz.scope}" data-sp="${qz.spot?1:0}">Try again</button><button class="go2" data-t="q">Change scope</button></div>`;return}
  const q=qz.q[qz.i];v.innerHTML=`<div class="mu">Question ${qz.i+1} of ${qz.q.length} · Score ${qz.sc} <span id="tm" style="float:right;font-weight:700"></span></div>`+(q.svg?`<div class="s" style="margin:8px 0">${q.svg}</div>`:'')+`<p><b>${q.t}</b></p>`+q.o.map((x,k)=>`<button class="opt" data-qa="${k}">${x}</button>`).join('')+'<div id="fb"></div>';if(qz.spot){const Q=q;qz.t=15;clearInterval(qz.iv);$('tm').textContent='⏱ 15s';qz.iv=setInterval(()=>{if(tab!='q'||qz.q[qz.i]!==Q||Q.done){clearInterval(qz.iv);return}qz.t--;$('tm').textContent='⏱ '+qz.t+'s';if(qz.t<=0)ans(-1)},1000)}}
-document.addEventListener('input',ev=>{const t=ev.target;if(t.id=='uq'){UN='';uni(t.value)}if(t.id=='uh')t.value=t.value.replace(/\D/g,'').replace(/^0+/,'').slice(0,10);if(t.id=='sq')srch(t.value);if(t.id=='cf')cr();if(t.id=='nt'){const p=PG(),o=vis()[oi];p.n=p.n||{};p.n[o[0]]=t.value;sP(p)}});
+document.addEventListener('input',ev=>{const t=ev.target;if(t.id=='uq'){UN='';uni(t.value)}if(t.id=='uh')t.value=t.value.replace(/\D/g,'').replace(/^0+/,'').slice(0,10);if(t.id=='sq')srch(t.value);if(t.id=='nt'){const p=PG(),o=vis()[oi];p.n=p.n||{};p.n[o[0]]=t.value;sP(p)}});
 const pk=()=>'hvs-p-'+(U?U.num:''),PG=()=>{try{return JSON.parse(localStorage.getItem(pk()))||{}}catch(_){return{}}},sP=p=>{try{localStorage.setItem(pk(),JSON.stringify(p))}catch(_){}};
-let cu=0,rows=[];
 const orgExtra=o=>{const p=PG();return `<div class="card"><button class="go2" style="margin-top:0" data-lrn="1">${p.l&&p.l[o[0]]?'✅ Learned (tap to undo)':'☐ Mark as learned'}</button><div class="k">My notes</div><textarea id="nt" rows="3" placeholder="Your own notes for this organ">${xs((p.n||{})[o[0]]||'')}</textarea></div>`+pn(o)};
 function prog(){const p=PG(),n=Object.keys(p.l||{}).length,t=ALL.length,la=(p.q||[]).slice(-1)[0],li=p.last?ALL.findIndex(x=>x[1][0]==p.last):-1,cn=li>=0?`<button class="go" data-find="${li}">▶ Continue: ${p.last}</button>`:'',w=Object.entries(p.m||{}).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,3);
  return `<div class="card"><div class="k" style="margin-top:0">My progress</div><b>${n} of ${t} organs learned</b><div class="bar"><i style="width:${n/t*100}%"></i></div><div class="mu">${la?'Last quiz: '+la.sc+'/'+la.n:'No quiz taken yet'}${w.length?'<br>Needs work: '+w.map(x=>x[0]).join(', '):''}</div>${cn}</div>`}
@@ -262,23 +264,14 @@ function recQ(){if(qz.rec)return;qz.rec=1;const p=PG();p.q=(p.q||[]).concat({sc:
 function ans(k){const Q=qz.q[qz.i];if(!Q||Q.done)return;Q.done=1;clearInterval(qz.iv);const ok=k==Q.a,p=PG();p.m=p.m||{};if(ok){qz.sc++;if(p.m[Q.g]>0)p.m[Q.g]--}else p.m[Q.g]=(p.m[Q.g]||0)+1;sP(p);
  const bs=document.querySelectorAll('.opt');bs[Q.a].classList.add('ok');if(k>=0&&!ok)bs[k].classList.add('no');
  $('fb').innerHTML=`<div class="card"><b>${ok?'Correct':k<0?"Time's up":'Not quite'}</b><p>${Q.x}</p><div class="mn">💡 ${Q.m}</div><button class="go" data-qn="1">${qz.i+1<qz.q.length?'Next':'See score'}</button></div>`}
-async function reg(){toSheet();try{const us=await claude.use('user'),db=await claude.use('db');if(!us||!db)return;const id=await us.id();if(!id)return;await db.doc('signins/'+id).set({name:U.name,school:U.school,phone:U.num,at:Date.now()})}catch(_){}}
-async function csvDl(){try{const dl=await claude.use('downloads');if(!dl)return;const q=c=>{let s=String(c==null?'':c);if(/^[=+\-@]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};await dl.save({filename:'class-signins.csv',data:'Name,University,Phone,Signed in\n'+rows.map(x=>[x.name,x.school,x.phone,x.at?new Date(x.at).toISOString():''].map(q).join(',')).join('\n')})}catch(_){}}
-async function cls(){const v=$('v');v.innerHTML='<div class="card"><h2>📋 Class sign-in list</h2><p class="mu">Checking access…</p></div>';let ok=false,db=null;
- try{const us=await claude.use('user');db=await claude.use('db');ok=!!(us&&db&&((await us.isOwner())||(await us.canEdit())))}catch(_){}
- if(!ok){v.innerHTML='<div class="card"><h2>Class list</h2><p class="mu">Only the owner of this lab can see the class list. Open this link from the owner\'s claude.ai account.</p><button class="go" data-a="lab">Go to the lab</button></div>';return}
- v.innerHTML='<div class="card"><h2>📋 Class sign-in list</h2><div id="cc" class="mu"></div><input id="cf" class="sq" placeholder="🔎 Filter by name, university or number"><button class="go2" data-a="csv">⬇ Download CSV</button><button class="go2" data-a="lab">← Back to the lab</button></div><div id="ct"></div>';
- cu=db.collection('signins').onSnapshot(s=>{rows=s.docs.map(d=>d.data()).sort((a,b)=>(b.at||0)-(a.at||0));cr()},()=>{$('cc').textContent='Could not load the list.'})}
-function cr(){const f=($('cf')||{value:''}).value.trim().toLowerCase(),r=rows.filter(x=>((x.name||'')+(x.school||'')+(x.phone||'')).toLowerCase().includes(f));
- $('cc').textContent=rows.length+' signed in'+(f?' · '+r.length+' shown':'');
- $('ct').innerHTML=r.map(x=>`<div class="card"><b>${xs(x.name||'')}</b><div class="mu">${xs(x.school||'')}<br>${xs(x.phone||'')} · ${x.at?new Date(x.at).toLocaleString():''}</div></div>`).join('')}
+function reg(){toSheet()}
 const crumb=o=>`<div class="crumb"><button data-t="h">Home</button> › ${o?`<button data-t="s">${D[si][0]}</button> › <b>${o[0]}</b>`:`<b>${D[si][0]}</b>`}</div>`;
 const sprog=()=>{const l=PG().l||{},O=vis(),n=O.filter(o=>l[o[0]]).length;return `<div class="bar"><i style="width:${n/O.length*100}%"></i></div><div class="mu" style="margin-bottom:10px">${n} of ${O.length} lessons completed</div>`};
 const mark=o=>{const p=PG();if(p.last!==o[0]){p.last=o[0];sP(p)}};
 const pn=o=>{const O=vis(),i=O.indexOf(o);return `<div class="pn">${i>0?`<button class="go2" data-nv="${i-1}">← ${O[i-1][0]}</button>`:'<span></span>'}${i<O.length-1?`<button class="go" data-nv="${i+1}">${O[i+1][0]} →</button>`:'<span></span>'}</div>`};
 let top0=0;
 function draw(){const t=tab;$('tb').hidden=!U;$('ex').hidden=$('spc').hidden=true;
- $('hero').hidden=!(t=='h'&&location.hash!='#class-list');if(cu){cu();cu=0}if(location.hash=='#class-list'){$('tb').hidden=true;cls();return}if(!U){tab='h';home()}else if(t=='o')drawX();else if(t=='s')sysPage();else if(t=='c')cmp();else if(t=='q')quiz();else if(t=='r')sheet();else home();
+ $('hero').hidden=t!='h';if(!U){tab='h';home()}else if(t=='o')drawX();else if(t=='s')sysPage();else if(t=='c')cmp();else if(t=='q')quiz();else if(t=='r')sheet();else home();
  document.querySelectorAll('#tb button').forEach(b=>b.classList.toggle('on',b.dataset.t==(t=='s'||t=='o'?'h':t)));
  document.querySelectorAll('#spc button').forEach(b=>b.classList.toggle('on',b.dataset.m==mode));if(top0){top0=0;try{scrollTo(0,0)}catch(_){}}}
 const tip=o=>{const l=sel!=null&&o[6][sel];return l?`<b>${l[0]}.</b> ${l[4]}`:'👆 Tap any layer to spotlight it and read what it does.'};
@@ -317,7 +310,6 @@ document.addEventListener('click',ev=>{const q=s=>ev.target.closest(s);let b;
  else if(b=q('[data-find]')){const k=+b.dataset.find,o=ALL[k][1];si=ALL[k][0];if(TAG[o[0]])mode=TAG[o[0]];oi=vis().indexOf(o);tab='o';vw='s';sel=null;top0=1;draw()}
  else if(b=q('[data-l]')){const w=b.closest('#sl,#lv'),i=+b.dataset.l,o=vis()[oi];if(!w||o[6][i][3]=='lu')return;sel=sel==i?null:i;w.innerHTML=w.id=='sl'?slide(o,sel,lb):live(o);$('tp').innerHTML=tip(o)}});
 document.addEventListener('change',ev=>{const t=ev.target;if(t.id=='lb'){lb=t.checked;draw()}if(t.id=='ca'){ca=+t.value;cmp()}if(t.id=='cb'){cb=+t.value;cmp()}});
-window.addEventListener('hashchange',draw);
 try{if(U&&localStorage.getItem('hvs-pend'))toSheet()}catch(_){}
 draw();
 </script></body></html>
